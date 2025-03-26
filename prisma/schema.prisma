@@ -12,3 +12,66 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  image          String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  hashedPassword String?
+  createdAt      DateTime  @default(now())
+  updateAt       DateTime  @updatedAt
+  favoriteIds    String[]  @db.ObjectId
+  sessions       Session[]
+  accounts       Account[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expiredAt         Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  // connecting both models
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // the onDelete:Cascade shows that when the user is deleted, the account too will be deleted
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  session_token String   @unique
+  userId        String   @db.ObjectId
+  expires       DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Movie {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String
+  videoUrl     String
+  thumbnailUrl String
+  genre        String
+  duration     String
+}
