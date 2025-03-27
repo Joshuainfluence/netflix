@@ -16,6 +16,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const response = { name: "John Doe" };
+  const response = { name: "John Does" };
   return NextResponse.json(response); // Automatically sets the Content-Type header
 }
