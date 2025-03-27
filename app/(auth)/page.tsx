@@ -16,6 +16,11 @@ const Auth = () => {
 
     }, []) // [] is a dependency array
 
+    // function to handle registration 
+    const register = useCallback(async () => {
+
+    }, [])
+
     return (
         <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
             <div className="bg-black/50 w-full h-full">
