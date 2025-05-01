@@ -1,5 +1,6 @@
 'use client'
 import Input from '@/components/Input'
+import axios from 'axios';
 import React, { useCallback, useState } from 'react'
 
 const Auth = () => {
@@ -18,8 +19,19 @@ const Auth = () => {
 
     // function to handle registration 
     const register = useCallback(async () => {
+        try {
+           const response = await axios.post('/api/register', {
+                email, 
+                name, 
+                password
+            });
 
-    }, [])
+            console.log("Registration successful", response.data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }, [email, name, password])
 
     return (
         <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -67,7 +79,7 @@ const Auth = () => {
                             
                             />
                         </div>
-                        <button className='bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700'>
+                        <button onClick={register} className='bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700'>
                            {variant === 'register' ? 'Sign up' : 'Login'}
                         </button>
                         <p className="text-neutral-500 mt-12">
